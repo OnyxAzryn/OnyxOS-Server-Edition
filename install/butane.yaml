@@ -4,7 +4,7 @@ passwd:
   users:
     - name: onyxazryn
       ssh_authorized_keys:
-        - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDtehLfJhVO9DU251DiPVl8UvJWo3f53erApd98ov/lm
+        - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICWjdc6EOFR3tREcz+b+VwU2HA9g7dkux0sUtFPq90dy
       groups:
         - docker
         - wheel
