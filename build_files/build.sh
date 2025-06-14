@@ -9,16 +9,20 @@ set -ouex pipefail
 # List of rpmfusion packages can be found here:
 # https://mirrors.rpmfusion.org/mirrorlist?path=free/fedora/updates/39/x86_64/repoview/index.html&protocol=https&redirect=1
 
-# this installs a package from fedora repos
-dnf5 install -y tmux 
+# Install the CachyOS Kernel
+dnf remove -y kernel kernel-core kernel-modules kernel-modules-core kernel-modules-extra kernel-uki-virt
+dnf -y copr enable bieszczaders/kernel-cachyos
+dnf install -y kernel-cachyos-server
+dnf -y copr disable bieszczaders/kernel-cachyos
 
-# Use a COPR Example:
-#
-# dnf5 -y copr enable ublue-os/staging
-# dnf5 -y install package
-# Disable COPRs so they don't end up enabled on the final image:
-# dnf5 -y copr disable ublue-os/staging
+# Install CachyOS Kernel Addons
+dnf -y copr enable bieszczaders/kernel-cachyos-addons
+dnf install -y cachyos-ksm-settings scx-manager scx-scheds
+dnf -y copr disable bieszczaders/kernel-cachyos-addons
 
-#### Example for enabling a System Unit File
+# Generate initramfs
+QUALIFIED_KERNEL="$(rpm -qa | grep -P 'kernel-cachyos-server-(\d+)' | sed -E 's/kernel-cachyos-server-//')"
+dracut --no-hostonly --kver "$QUALIFIED_KERNEL" --reproducible --zstd -v --add ostree -f "/lib/modules/$QUALIFIED_KERNEL/initramfs.img"
+chmod 0600 /lib/modules/$QUALIFIED_KERNEL/initramfs.img
 
 systemctl enable podman.socket
