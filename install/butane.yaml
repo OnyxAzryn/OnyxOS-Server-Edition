@@ -1,0 +1,50 @@
+variant: fcos
+version: 1.6.0
+passwd:
+  users:
+    - name: onyxazryn
+      ssh_authorized_keys:
+        - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDtehLfJhVO9DU251DiPVl8UvJWo3f53erApd98ov/lm
+storage:
+  directories:
+    - path: /etc/onyxos-server-edition-autorebase
+      mode: 0754
+
+systemd:
+  units:
+    - name: onyxos-server-edition-unsigned-autorebase.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=OnyxOS Server Edition autorebase to unsigned OCI and reboot
+        ConditionPathExists=!/etc/onyxos-server-edition-autorebase/unverified
+        ConditionPathExists=!/etc/onyxos-server-edition-autorebase/signed
+        After=network-online.target
+        Wants=network-online.target
+        [Service]
+        Type=oneshot
+        StandardOutput=journal+console
+        ExecStart=/usr/bin/rpm-ostree rebase --bypass-driver ostree-unverified-registry:ghcr.io/onyxazryn/onyxos-server-edition:latest
+        ExecStart=/usr/bin/touch /etc/onyxos-server-edition-autorebase/unverified
+        ExecStart=/usr/bin/systemctl disable onyxos-server-edition-unsigned-autorebase.service
+        ExecStart=/usr/bin/systemctl reboot
+        [Install]
+        WantedBy=multi-user.target
+    - name: onyxos-server-edition-signed-autorebase.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=OnyxOS Server Edition autorebase to signed OCI and reboot
+        ConditionPathExists=/etc/onyxos-server-edition-autorebase/unverified
+        ConditionPathExists=!/etc/onyxos-server-edition-autorebase/signed
+        After=network-online.target
+        Wants=network-online.target
+        [Service]
+        Type=oneshot
+        StandardOutput=journal+console
+        ExecStart=/usr/bin/rpm-ostree rebase --bypass-driver ostree-image-signed:docker://ghcr.io/onyxazryn/onyxos-server-edition:latest
+        ExecStart=/usr/bin/touch /etc/onyxos-server-edition-autorebase/signed
+        ExecStart=/usr/bin/systemctl disable onyxos-server-edition-signed-autorebase.service
+        ExecStart=/usr/bin/systemctl reboot
+        [Install]
+        WantedBy=multi-user.target
