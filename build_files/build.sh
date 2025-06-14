@@ -16,9 +16,9 @@ dnf install -y kernel-cachyos-server
 dnf -y copr disable bieszczaders/kernel-cachyos
 
 # Install CachyOS Kernel Addons
-dnf -y copr enable bieszczaders/kernel-cachyos-addons
-dnf install -y cachyos-ksm-settings scx-scheds
-dnf -y copr disable bieszczaders/kernel-cachyos-addons
+#dnf -y copr enable bieszczaders/kernel-cachyos-addons
+#dnf install -y cachyos-ksm-settings scx-scheds
+#dnf -y copr disable bieszczaders/kernel-cachyos-addons
 
 # Disable ZFS
 echo "omit_dracutmodules+=\" zfs \"" | tee -a /etc/dracut.conf.d/omit-zfs.conf
