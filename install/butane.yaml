@@ -5,6 +5,10 @@ passwd:
     - name: onyxazryn
       ssh_authorized_keys:
         - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDtehLfJhVO9DU251DiPVl8UvJWo3f53erApd98ov/lm
+      groups:
+        - docker
+        - wheel
+        - sudo
 storage:
   directories:
     - path: /etc/onyxos-server-edition-autorebase
