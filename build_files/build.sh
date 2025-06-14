@@ -28,6 +28,4 @@ QUALIFIED_KERNEL="$(rpm -qa | grep -P 'kernel-cachyos-server-(\d+)' | sed -E 's/
 dracut --no-hostonly --kver "$QUALIFIED_KERNEL" --reproducible --zstd -v --add ostree -f "/lib/modules/$QUALIFIED_KERNEL/initramfs.img"
 chmod 0600 /lib/modules/$QUALIFIED_KERNEL/initramfs.img
 
-ls -la /usr/etc
-
 #systemctl enable podman.socket
