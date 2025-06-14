@@ -22,7 +22,7 @@ dnf -y copr disable bieszczaders/kernel-cachyos-addons
 
 # Generate initramfs
 QUALIFIED_KERNEL="$(rpm -qa | grep -P 'kernel-cachyos-server-(\d+)' | sed -E 's/kernel-cachyos-server-//')"
-dracut --no-hostonly --kver "$QUALIFIED_KERNEL" --reproducible --zstd -v --add ostree -f "/lib/modules/$QUALIFIED_KERNEL/initramfs.img"
+dracut --no-hostonly --kver "$QUALIFIED_KERNEL" --reproducible --zstd -v --add ostree -f "/lib/modules/$QUALIFIED_KERNEL/initramfs.img" --omit-drivers zfs
 chmod 0600 /lib/modules/$QUALIFIED_KERNEL/initramfs.img
 
 systemctl enable podman.socket
