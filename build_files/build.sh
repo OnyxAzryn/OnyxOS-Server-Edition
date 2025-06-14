@@ -20,9 +20,12 @@ dnf -y copr enable bieszczaders/kernel-cachyos-addons
 dnf install -y cachyos-ksm-settings scx-manager scx-scheds
 dnf -y copr disable bieszczaders/kernel-cachyos-addons
 
+# Disable ZFS
+echo "omit_dracutmodules+=\" zfs \"" | tee -a /etc/dracut.conf.d/omit-zfs.conf
+
 # Generate initramfs
 QUALIFIED_KERNEL="$(rpm -qa | grep -P 'kernel-cachyos-server-(\d+)' | sed -E 's/kernel-cachyos-server-//')"
-dracut --no-hostonly --kver "$QUALIFIED_KERNEL" --reproducible --zstd -v --add ostree -f "/lib/modules/$QUALIFIED_KERNEL/initramfs.img" --omit-drivers zfs
+dracut --no-hostonly --kver "$QUALIFIED_KERNEL" --reproducible --zstd -v --add ostree -f "/lib/modules/$QUALIFIED_KERNEL/initramfs.img"
 chmod 0600 /lib/modules/$QUALIFIED_KERNEL/initramfs.img
 
 systemctl enable podman.socket
