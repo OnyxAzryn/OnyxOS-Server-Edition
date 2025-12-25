@@ -10,7 +10,7 @@ set -ouex pipefail
 # https://mirrors.rpmfusion.org/mirrorlist?path=free/fedora/updates/39/x86_64/repoview/index.html&protocol=https&redirect=1
 
 # Install the CachyOS Kernel
-dnf remove -y kernel kernel-core kernel-modules kernel-modules-core kernel-modules-extra kernel-uki-virt
+dnf remove -y kernel*
 dnf -y copr enable bieszczaders/kernel-cachyos
 dnf install -y kernel-cachyos-server
 dnf -y copr disable bieszczaders/kernel-cachyos
